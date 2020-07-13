@@ -32,32 +32,50 @@ function validate(req, res, next) {
     next();
 }
 
-router.get('/', async (req, res, next) => {
-    let offerModel = await offer.find();
+router.get('/:id', async (req, res, next) => {
+    let offerId = req.params.id;
+    let offerModel = {};
+
+    if (typeof offerId !== "undefined") {
+        offerModel = await offer.findById(offerId);
+    } else {
+        offerModel = await offer.find();
+    }
     return res.status(200).json({ offerModel, message: true });
 });
 
-router.post('/', validate, (req, res, next) => {
-    let { offerName, discount, code, image } = req.body;
+router.post('/:id', async (req, res, next) => {
 
-    let offerModel = new offer({
-        "offerName": offerName,
-        "discount": discount,
-        "code": code,
-        "image": image
-    });
+    let offerId = req.params.id;
+    let offerModel = {};
 
-    offerModel.save((error) => {
-        if (error) return res.status(401).json({
-            message: false,
+    if (typeof offerId !== "undefined") {
+        offerModel = await offer.findByIdAndUpdate(id);
+    } else {
+
+
+        let { offerName, discount, code, image } = req.body;
+
+        let offerModel = new offer({
+            "offerName": offerName,
+            "discount": discount,
+            "code": code,
+            "image": image
         });
-    });
+
+        offerModel.save((error) => {
+            if (error) return res.status(401).json({
+                message: false,
+            });
+        });
+    }
 
     return res.status(200).json({ offerModel, message: true });
 });
 
-router.delete('/', async (req, res, next) => {
-    let status  = await offer.findByIdAndDelete(req.body._id);
+router.delete('/:id', async (req, res, next) => {
+    let offerId = req.params.id;
+    let status = await offer.findByIdAndDelete(offerId);
     res.status(200).json({
         message: true,
         status: status

@@ -14,12 +14,15 @@ const pointSchema = new mongoose.Schema({
 });
 
 let userSchema = new Schema({
-    name: String,
+    firstname: String,
+    lastname: String,
+    role: String,
     email: String,
     image: String,
     contact: String,
     password: String,
     jwtToken: String,
+    accessToken: String,
     location: {
         type: pointSchema,
         required: true

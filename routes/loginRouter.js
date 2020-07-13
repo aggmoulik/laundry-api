@@ -24,16 +24,19 @@ function verifyJwtToken(req, res, next) {
 
 router.post('/', async (req, res, next) => {
     let { email, password } = req.body;
+    let { name } = req.query;
+    console.log(name);
     let user = await User.find({ "email": email }).exec();
     if (user.length < 1) {
         return res.status(401).json({
-            message: 'Auth Failed 1'
+            message: 'User Dosen\'t exists'
         });
     }
     let result = bcrypt.compareSync(password, user[0].password);
     if (result) {
         return res.status(200).json({
-            message: 'Auth Successfull'
+            message: 'Auth Successfull',
+            name: name
         });
     } else {
         return res.status(401).json({
