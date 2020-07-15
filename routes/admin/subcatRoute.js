@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Services = require('../../models/admin/subCategoryModel');
+// var Services = require('../../models/subCategoryModel');
 
 router.get('/', async (req, res, next) => {
     let serviceModel = {};

@@ -7,4 +7,10 @@ let serviceSchema = new Schema({
     description: String
 });
 
+serviceSchema.set('toJSON', {
+    transform: (doc, ret) => {
+        return ret;
+    }
+});
+
 module.exports = mongoose.model('services', serviceSchema, 'services');

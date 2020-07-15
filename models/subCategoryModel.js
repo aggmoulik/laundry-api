@@ -7,4 +7,10 @@ let subcatSchema = new Schema({
     description: String
 });
 
+subcatSchema.set('toJSON', {
+    transform: (doc, ret) => {
+        return ret;
+    }
+});
+
 module.exports = mongoose.model('subcategory', subcatSchema, 'subcategory');

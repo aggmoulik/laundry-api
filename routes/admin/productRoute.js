@@ -1,85 +1,20 @@
 var express = require('express');
 var router = express.Router();
-var Product = require('../../models/admin/productModel');
+let Model = require('../../shared/TYPES').PRODUCT;
+let CRUD = require('../../shared/CRUD');
 
-router.get('/', async (req, res, next) => {
-    let productModel = {};
-    try {
-        productModel = await Product.find();
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ productModel, message: true });
-});
+// Get All
+router.get('/', (req, res) => CRUD.getAll(req, Model, res));
 
-router.get('/:id', async (req, res, next) => {
-    let productId = req.params.id;
-    let productModel = {};
+// Get By Id
+router.get('/:id', (req, res) => CRUD.getById(req.params.id, Model, res));
 
-    try {
-        if (typeof productId !== "undefined") {
-            productModel = await Product.findById(productId);
-        } else {
-            throw new Error("Product ID not defined")
-        }
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ productModel, message: true });
-});
+// Add a Product
+router.post('/', (req, res) => CRUD.create(req.body, Model, res));
 
-router.post('/', async (req, res, next) => {
-    let { product } = req.body;
-    productModel = new Product(product);
-    productModel.save((error) => {
-        if (error) return res.status(401).json({
-            message: false,
-        });
-    });
-    return res.status(200).json({ productModel, message: true });
-})
+// Update By Id
+router.post('/:id', (req, res) => CRUD.updateById(req.params.id, req.body, Model, res));
 
-router.post('/:id', async (req, res, next) => {
-
-    let productId = req.params.id;
-    let productModel = {};
-    try {
-        if (typeof productId !== "undefined") {
-            let product = req.body.product;
-            productModel = await Product.findByIdAndUpdate(productId, product);
-        } else {
-            throw new Error("Product ID not defined")
-        }
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ productModel, message: true });
-});
-
-router.delete('/:id', async (req, res, next) => {
-    let productId = req.params.id;
-    let status = '';
-    try {
-        status = await offer.findByIdAndDelete(productId);
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    res.status(200).json({
-        message: true,
-        status: status
-    })
-})
+router.delete('/:id', (req, res) => CRUD.deleteById(req.params.id, Model, res));
 
 module.exports = router;
