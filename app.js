@@ -6,23 +6,18 @@ var fs = require('fs');
 const fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/registerRouter');
 var loginRouter = require('./routes/loginRouter');
-var offerRouter = require('./routes/admin/offerRouter');
-var blogRouter = require('./routes/admin/blogRouter');
-var sliderRouter = require('./routes/admin/dashboardRouter');
 var authRouter = require('./routes/authRoute');
-let productRouter = require('./routes/admin/productRoute');
-let serviceRouter = require('./routes/admin/servicesRoute');
 let adminRouter = require('./routes/admin/adminRouter')
+
 var app = express();
 
 const DB_PASSWORD = 'moulik123';
 const DB_NAME = 'laundry';
 const DB_HOST_NAME = 'c1ph3r';
 const server = `mongodb+srv://${DB_HOST_NAME}:${DB_PASSWORD}@laundry.3m5pn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
-// const uri = `mongodb://${DB_HOST_NAME}:${DB_PASSWORD}@laundry.3m5pn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+
 mongoose.connect(server, { useNewUrlParser: true }, () => {
   console.log("DB Connected");
 }).catch((error) => {
@@ -49,19 +44,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// if (!fs.existsSync('./uploads')) {
-//   fs.mkdirSync('./uploads');
-// }
+if (!fs.existsSync('./uploads')) {
+  fs.mkdirSync('./uploads');
+}
 
-// if (!fs.existsSync('./temp')) {
-//   fs.mkdirSync('./temp');
-// }
+if (!fs.existsSync('./temp')) {
+  fs.mkdirSync('./temp');
+}
 
-// app.use(express.static('uploads'));
-// app.use(fileUpload({
-//   useTempFiles: true,
-//   tempFileDir: './temp/'
-// }));
+app.use(express.static('uploads'));
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: './temp/'
+}));
 
 // function getAccessTokenFromHeader(request) {
 //   const authorizationHeader = request.headers.authorization;
@@ -106,15 +101,9 @@ app.use((req, res, next) => {
 
 
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-// app.use('/admin/offer', offerRouter);
-// app.use('/admin/blog', blogRouter);
-// app.use('/admin/upload', sliderRouter);
 app.use('/auth', authRouter);
-// app.use('/product', productRouter);
-// app.use('/services', serviceRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
