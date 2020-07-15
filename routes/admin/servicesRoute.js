@@ -1,81 +1,20 @@
 var express = require('express');
 var router = express.Router();
-var Services = require('../../models/serviceModel');
+let Model = require('../../shared/TYPES').SERVICE;
+let CRUD = require('../../shared/CRUD');
 
-router.get('/', async (req, res, next) => {
-    let serviceModel = {};
-    try {
-        serviceModel = await Services.find();
-    } catch (err) {
-        return res.status(401).json({
-            message: false,
-            error: err
-        });
-    }
-    return res.status(200).json({
-        serviceModel
-    });
-});
+// Get All
+router.get('/', (req, res) => CRUD.getAll(req, Model, res));
 
-router.get('/:id', async (req, res, next) => {
-    let serviceId = req.params.id ? req.params.id : "";
-    let serviceModel = {};
+// Get By Id
+router.get('/:id', (req, res) => CRUD.getById(req.params.id, Model, res));
 
-    try {
-        if (typeof serviceId !== "undefined") {
-            serviceModel = await Services.findById(serviceId);
-        } else {
-            throw new Error("Not Found");
-        }
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ serviceModel, message: true });
-});
+// Add a Product
+router.post('/', (req, res) => CRUD.create(req.body, Model, res));
 
-router.post('/:id', async (req, res, next) => {
-    let serviceId = req.params.id;
-    let serviceModel = {};
-    try {
-        let service = req.body.service;
-        serviceModel = await Services.findByIdAndUpdate(serviceId, service);
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ serviceModel, message: true });
-})
+// Update By Id
+router.post('/:id', (req, res) => CRUD.updateById(req.params.id, req.body, Model, res));
 
-router.post('/', async (req, res, next) => {
-
-    let serviceModel = {};
-    try {
-        let { service } = req.body;
-        serviceModel = new Services(service);
-        serviceModel.save((error) => {
-            if (error) throw new Error("Not Added");
-        });
-    } catch (error) {
-        return res.status(401).json({
-            status: 401,
-            error: error.message
-        });
-    }
-    return res.status(200).json({ serviceModel, message: true });
-});
-
-router.delete('/:id', async (req, res, next) => {
-    let serviceId = req.params.id;
-    let status = await offer.findByIdAndDelete(serviceId);
-    res.status(200).json({
-        message: true,
-        status: status
-    })
-})
+router.delete('/:id', (req, res) => CRUD.deleteById(req.params.id, Model, res));
 
 module.exports = router;
