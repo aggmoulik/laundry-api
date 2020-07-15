@@ -10,9 +10,9 @@ let productSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'services'
     }],
-    subcategory: [{
+    category: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'subcategory'
+        ref: 'category'
     }]
 });
 

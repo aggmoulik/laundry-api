@@ -1,6 +1,6 @@
 const TYPES = Object.freeze({
     USER: '../models/usersModel',
-    CATEGORY: '../models/Category',
+    CATEGORY: '../models/categoryModel',
     PRODUCT: '../models/productModel',
     SERVICE: '../models/serviceModel'
 });

@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-let subcatSchema = new Schema({
+let category = new Schema({
     name: String,
     image: String,
     description: String
 });
 
-subcatSchema.set('toJSON', {
+category.set('toJSON', {
     transform: (doc, ret) => {
         return ret;
     }
 });
 
-module.exports = mongoose.model('subcategory', subcatSchema, 'subcategory');
+module.exports = mongoose.model('category', category, 'category');
