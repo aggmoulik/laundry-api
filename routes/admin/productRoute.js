@@ -18,10 +18,4 @@ router.post('/:id', (req, res) => CRUD.updateById(req.params.id, req.body, Model
 // Delete By Id
 router.delete('/:id', (req, res) => CRUD.deleteById(req.params.id, Model, res));
 
-// Upload Product Image
-router.post('/upload', (req, res) => {
-    console.log("hshahhshs")
-    CRUD.uploadFile(req, res)
-});
-
 module.exports = router;

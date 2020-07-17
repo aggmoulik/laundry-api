@@ -1,15 +1,16 @@
-var createError = require('http-errors');
-var express = require('express');
-var logger = require('morgan');
-const mongoose = require('mongoose');
-var fs = require('fs');
-const fileUpload = require('express-fileupload');
+const createError = require('http-errors'),
+  express = require('express'),
+  logger = require('morgan'),
+  mongoose = require('mongoose'),
+  fs = require('fs'),
+  fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/registerRouter');
 var loginRouter = require('./routes/loginRouter');
 var authRouter = require('./routes/authRoute');
-let adminRouter = require('./routes/admin/adminRouter')
+let adminRouter = require('./routes/admin/adminRouter');
+const { uploadFile } = require('./controllers/UploadController');
 
 var app = express();
 
@@ -105,6 +106,7 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
+app.post('/upload', (req, res) => uploadFile(req, res));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
