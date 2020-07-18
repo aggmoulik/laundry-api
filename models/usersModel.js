@@ -26,7 +26,6 @@ let userSchema = new Schema({
     access_token: String,
     location: {
         type: pointSchema,
-        required: true
     },
     last_login: Date,
     google_id: String,

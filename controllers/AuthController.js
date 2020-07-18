@@ -94,7 +94,7 @@ module.exports.register = (req, res) => {
                 let user = new User(req.body);
 
                 if (user.password) {
-                    user.password = bcrypt.hashSync(password, SALT_ROUNDS);
+                    user.password = bcrypt.hashSync(user.password, SALT_ROUNDS);
                 }
 
                 if (!user.role) {
