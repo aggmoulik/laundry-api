@@ -203,15 +203,17 @@ module.exports.refresh = async (req, res) => {
         const user = await User.findById(user_id);
 
         const password = user.password;
-        const keyToCompare = genKey(userId, password);
+        const keyToCompare = genKey(user_id, password);
 
         if (keyToCompare !== tokenPayload.key) {
             throw new Error('UnAuthorized Login');
         }
 
         const access_token = genAccessToken(user);
-        user.access_token = access_token
-        Response.success(res, 200, "Access Token",)
+        user.access_token = access_token;
+        user.save((err, doc)=> {});
+        delete user._doc.password;
+        Response.success(res, 200, "Access Token",user)
     } catch (error) {
         Response.error(res, 401, error.message);
     }
