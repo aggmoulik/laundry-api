@@ -4,8 +4,8 @@ var express = require('express'),
 
 router.post('/login', (req, res) => login(req, res));
 
-router.post('/refreshToken', (req, res) => register(req, res));
+router.post('/refreshToken', (req, res) => refresh(req, res));
 
-router.post('/register', (req, res) => refresh(req, res));
+router.post('/register', (req, res) => register(req, res));
 
 module.exports = router;
