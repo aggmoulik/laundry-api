@@ -3,11 +3,13 @@ const User = require("../models/usersModel"),
     bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken'),
     crypto = require('crypto'),
-    { JWT_SECRET_KEY, SALT_ROUNDS, FIFTEEN_MINUTES_IN_SECOND } = require('../shared/Constants');
+    { JWT_SECRET_KEY, SALT_ROUNDS, FIFTEEN_MINUTES_IN_SECOND, THREE_MINUTES_IN_SECOND } = require('../shared/Constants');
 
 const LoginMethods = Object.freeze({
     EMAIL: 1,
-    MOBILE: 2
+    MOBILE: 2,
+    FACEBOOK: 3,
+    GOOGLE: 4
 });
 
 function checkIfPasswordIsCorrect(founduser, password) {
@@ -25,7 +27,7 @@ function genAccessToken(user) {
     const accessToken = jwt.sign(
         tokenPayload,
         JWT_SECRET_KEY,
-        { expiresIn: FIFTEEN_MINUTES_IN_SECOND }
+        { expiresIn: THREE_MINUTES_IN_SECOND }
     );
     return accessToken;
 }
@@ -60,9 +62,14 @@ module.exports.register = (req, res) => {
         $or: []
     };
 
-    // Social login
-    if (req.body.social_id) {
-        query.$or.push({ social_id: req.body.social_id });
+    // Google login
+    if (req.body.login_method === LoginMethods.GOOGLE) {
+        query.$or.push({ google_id: req.body.social_id });
+    }
+
+    // Facebook login
+    if (req.body.login_method === LoginMethods.FACEBOOK) {
+        query.$or.push({ facebook_id: req.body.social_id });
     }
 
     // Email login
@@ -115,8 +122,10 @@ module.exports.login = (req, res) => {
     // DB query for User
     let query = {};
 
-    if (req.body.social_id) { // Social login
-        query.social_id = req.body.social_id;
+    if (req.body.login_method === LoginMethods.GOOGLE) { // Google login
+        query.google_id = req.body.social_id;
+    } else if (req.body.login_method === LoginMethods.FACEBOOK) { // Facebook Login
+        query.facebook_id = req.body.social_id;
     } else { // Regular login
         if (req.body.login_method === LoginMethods.EMAIL) {
             // Email login
@@ -192,7 +201,7 @@ module.exports.refresh = async (req, res) => {
         }
         const user_id = tokenPayload.userId;
         const user = await User.findById(user_id);
-        
+
         const password = user.password;
         const keyToCompare = genKey(userId, password);
 

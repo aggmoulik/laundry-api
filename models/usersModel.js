@@ -29,7 +29,8 @@ let userSchema = new Schema({
         required: true
     },
     last_login: Date,
-    social_id: String
+    google_id: String,
+    facebook_id: String
 });
 
 userSchema.set('toJSON', {
