@@ -16,17 +16,26 @@ const pointSchema = new mongoose.Schema({
 let userSchema = new Schema({
     firstname: String,
     lastname: String,
+    username: String,
     role: String,
     email: String,
     image: String,
-    contact: String,
+    mobile_no: String,
     password: String,
-    jwtToken: String,
-    accessToken: String,
+    refresh_token: String,
+    access_token: String,
     location: {
         type: pointSchema,
         required: true
     },
+    last_login: Date,
+    social_id: String
+});
+
+userSchema.set('toJSON', {
+    transform: (doc, ret) => {
+        return ret;
+    }
 });
 
 module.exports = mongoose.model('users', userSchema, 'users');

@@ -3,11 +3,10 @@ const createError = require('http-errors'),
   logger = require('morgan'),
   mongoose = require('mongoose'),
   fs = require('fs'),
-  fileUpload = require('express-fileupload');
+  fileUpload = require('express-fileupload'),
+  { authorizationMiddleware } = require('./controllers/Middleware');
 
 var indexRouter = require('./routes/index');
-var registerRouter = require('./routes/registerRouter');
-var loginRouter = require('./routes/loginRouter');
 var authRouter = require('./routes/authRoute');
 let adminRouter = require('./routes/admin/adminRouter');
 const { uploadFile } = require('./controllers/UploadController');
@@ -59,54 +58,11 @@ app.use(fileUpload({
   tempFileDir: './temp/'
 }));
 
-// function getAccessTokenFromHeader(request) {
-//   const authorizationHeader = request.headers.authorization;
-//   let token;
-//   if (authorizationHeader) {
-//     token = request.headers.authorization.split(' ')[1];
-//   }
-//   return token;
-// }
-
-// function authorizationMiddleware(request, response, nextHandler) {
-//   const accessToken = getAccessTokenFromHeader(request);
-
-//   try {
-//     const tokenPayload = jwt.verify(accessToken, JWT_SECRET_KEY);
-//     if (tokenPayload.type !== 'access') {
-//       throw new Error('wrong token type');
-//     }
-//     console.log(tokenPayload);
-//     response.locals.user = tokenPayload;
-//     nextHandler();
-//   } catch (error) {
-//     response.status(401).send(error.message);
-//   }
-// }
-
-// app.use(function (request, response, nextHandler) {
-//   const accessToken = getAccessTokenFromHeader(request);
-
-//   try {
-//     const tokenPayload = jwt.verify(accessToken, JWT_SECRET_KEY);
-//     if (tokenPayload.type !== 'access') {
-//       throw new Error('wrong token type');
-//     }
-//     console.log(tokenPayload);
-//     response.locals.user = tokenPayload;
-//     nextHandler();
-//   } catch (error) {
-//     response.status(401).send(error.message);
-//   };
-// });
-
-
+// app.use((req, res, next) => authorizationMiddleware(req, res, next));
 app.use('/', indexRouter);
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
 app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
-app.post('/upload', (req, res) => uploadFile(req, res));
+app.use('/admin', authorizationMiddleware, adminRouter);
+app.post('/upload', authorizationMiddleware, (req, res) => uploadFile(req, res));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -20,6 +20,6 @@ productSchema.set('toJSON', {
     transform: (doc, ret) => {
         return ret;
     }
-})
+});
 
 module.exports = mongoose.model('products', productSchema, 'products');

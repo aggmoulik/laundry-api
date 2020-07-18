@@ -13,11 +13,9 @@ function createNewModelInstanceByName(type, val) {
 // Get All
 exports.getAll = async (req, type, res) => {
     const model = getModelByType(type);
-    console.log(model);
     let result = {};
     try {
         result = await model.find();
-        console.log(result);
     } catch (error) {
         Response.error(res, 501, error.message);
     }
@@ -26,7 +24,6 @@ exports.getAll = async (req, type, res) => {
 
 // Create
 exports.create = function (val, type, res) {
-    console.log("Body", val);
     const model = createNewModelInstanceByName(type, val);
     model.save((err, doc) => {
         Response.generalPayloadResponse(err, doc, res);
