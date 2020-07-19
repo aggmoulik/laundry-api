@@ -4,6 +4,7 @@ const createError = require('http-errors'),
   mongoose = require('mongoose'),
   fs = require('fs'),
   fileUpload = require('express-fileupload'),
+  path = require('path'),
   { authorizationMiddleware } = require('./controllers/Middleware');
 
 var indexRouter = require('./routes/index');
@@ -27,7 +28,9 @@ mongoose.connect(server, { useNewUrlParser: true }, () => {
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use((req, res, next) => {
+
+// cors
+app.use('*', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   // Allowed headers
   res.setHeader(
@@ -52,11 +55,20 @@ if (!fs.existsSync('./temp')) {
   fs.mkdirSync('./temp');
 }
 
-app.use(express.static('uploads'));
+app.use('/resources', express.static(path.join(__dirname, 'uploads'), {
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, path) => {
+    res.setHeader('Cache-Control', 'max-age=604800')
+  }
+}));
+
+// app.use(express.static('uploads'));
 app.use(fileUpload({
   useTempFiles: true,
   tempFileDir: './temp/'
 }));
+
 
 // app.use((req, res, next) => authorizationMiddleware(req, res, next));
 app.use('/', indexRouter);

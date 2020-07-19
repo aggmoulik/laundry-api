@@ -1,85 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var offer = require('../../models/admin/offerModel');
+const express = require('express'),
+    router = express.Router(),
+    CRUD = require('../../shared/CRUD'),
+    Model = require('../../shared/TYPES').OFFER,
+    controller = require('../../controllers/OfferController');
 
-function validate(req, res, next) {
-    let { offerName, discount, code, image } = req.body;
+router.get('/', (req, res) => CRUD.getAll(req, Model, res));
 
-    if (!offerName || typeof offerName === "undefined") {
-        return res.status(401).json({
-            message: "Enter the Offer Name"
-        });
-    };
+router.get('/:id', (req, res) => CRUD.getById(req.params.id, Model, res));
 
-    if (!discount || typeof discount === "undefined") {
-        return res.status(401).json({
-            message: "Enter the Discount"
-        });
-    };
+router.post('/', (req, res) => controller.addOffer(req, res));
 
-    if (!code || typeof code === "undefined") {
-        return res.status(401).json({
-            message: "Enter the Offer Code"
-        });
-    };
-
-    if (!image || typeof image === "undefined") {
-        return res.status(401).json({
-            message: "Enter the Image URL"
-        });
-    };
-
-    next();
-}
-
-router.get('/:id', async (req, res, next) => {
-    let offerId = req.params.id;
-    let offerModel = {};
-
-    if (typeof offerId !== "undefined") {
-        offerModel = await offer.findById(offerId);
-    } else {
-        offerModel = await offer.find();
-    }
-    return res.status(200).json({ offerModel, message: true });
-});
-
-router.post('/:id', async (req, res, next) => {
-
-    let offerId = req.params.id;
-    let offerModel = {};
-
-    if (typeof offerId !== "undefined") {
-        offerModel = await offer.findByIdAndUpdate(id);
-    } else {
-
-
-        let { offerName, discount, code, image } = req.body;
-
-        let offerModel = new offer({
-            "offerName": offerName,
-            "discount": discount,
-            "code": code,
-            "image": image
-        });
-
-        offerModel.save((error) => {
-            if (error) return res.status(401).json({
-                message: false,
-            });
-        });
-    }
-
-    return res.status(200).json({ offerModel, message: true });
-});
-
-router.delete('/:id', async (req, res, next) => {
-    let offerId = req.params.id;
-    let status = await offer.findByIdAndDelete(offerId);
-    res.status(200).json({
-        message: true,
-        status: status
-    })
-})
+router.post('/:id', (req, res) => CRUD.updateById(req.params.id, req.body, Model, res));
 
 module.exports = router;

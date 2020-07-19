@@ -18,10 +18,10 @@ function saveFile(file, req, callback) {
     }
     const pathToFile = dir + '/' + prefix + file.name
 
-    const BASE_URL = `http://${req.hostname}:3005/`
+    const BASE_URL = req.hostname
 
     // Url to access file
-    const accessUrl = BASE_URL + 'uploads/' + req.body.path + '/' + prefix + encodeURIComponent(file.name);
+    const accessUrl = BASE_URL + '/resources/' + req.body.path + '/' + prefix + encodeURIComponent(file.name);
 
     file.mv(pathToFile, function (err) {
         callback(err, accessUrl);
