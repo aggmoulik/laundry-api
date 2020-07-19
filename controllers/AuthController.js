@@ -110,7 +110,7 @@ module.exports.register = (req, res) => {
 
                 // Add User in DB
                 let result = await User.create(user);
-
+                delete result._doc.password;
                 Response.success(res, 200, "User Created Successfully", result)
             }
         }
@@ -152,21 +152,21 @@ module.exports.login = (req, res) => {
 
                 const pw = doc.password;
 
-                // Generate Token
-
-                const access_token = genAccessToken(doc);
-                const refresh_token = genRefreshToken(doc);
-
-                doc.access_token = access_token;
-                doc.refresh_token = refresh_token;
-
-                if (req.body.social_id || (req.body.login_method === LoginMethods.MOBILE)) {
+                if ((req.body.login_method === LoginMethods.FACEBOOK) ||
+                    (req.body.login_method === LoginMethods.MOBILE) ||
+                    (req.body.login_method === LoginMethods.GOOGLE)) {
                     // user exists and social login
                     Response.generalPayloadResponse(err, doc, res);
                 } else {
                     // User exists and check password
-                    if (checkIfPasswordIsCorrect()) {
-                        Response.generalPayloadResponse(err, doc, res);
+                    if (checkIfPasswordIsCorrect(doc, req.body.password)) {
+                        // Generate Token
+                        const access_token = genAccessToken(doc);
+                        doc.access_token = access_token;
+                        delete doc._doc.password;
+                        doc.update(doc, (err, data) => {
+                            Response.generalPayloadResponse(err, doc, res);
+                        });
                     } else {
                         Response.generalResponse(err, res, 404, "Invalid Email or Password");
                     }
@@ -211,9 +211,11 @@ module.exports.refresh = async (req, res) => {
 
         const access_token = genAccessToken(user);
         user.access_token = access_token;
-        user.save((err, doc)=> {});
-        delete user._doc.password;
-        Response.success(res, 200, "Access Token",user)
+        user.update(user, (err, data) => {
+            delete user._doc.password;
+            Response.generalPayloadResponse(err, user, res, 200, "Access Token");
+        });
+        // Response.success(res, 200, "Access Token", user)
     } catch (error) {
         Response.error(res, 401, error.message);
     }

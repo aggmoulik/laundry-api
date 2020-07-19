@@ -61,8 +61,8 @@ app.use(fileUpload({
 // app.use((req, res, next) => authorizationMiddleware(req, res, next));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/admin', authorizationMiddleware, adminRouter);
-app.post('/upload', authorizationMiddleware, (req, res) => uploadFile(req, res));
+app.use('/admin', adminRouter);
+app.post('/upload', (req, res) => uploadFile(req, res));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
