@@ -6,14 +6,18 @@ let productSchema = new Schema({
     image: String,
     description: String,
     price: String,
-    services: [{
+    services: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'services'
-    }],
-    category: [{
+    },
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'category'
-    }]
+    },
+    status: {
+        type: Number,
+        default: 1
+    }
 });
 
 productSchema.set('toJSON', {

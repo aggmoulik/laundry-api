@@ -17,6 +17,6 @@ router.use('/product', productRouter);
 router.use('/category', categoryRouter);
 
 // All delete route
-router.delete('/delete/:type/:id', (req, res) => CRUD.deleteById(req.params.id, TYPES[req.params.type.toUpperCase()], res));
+router.delete('/delete/:type/:id', (req, res) => CRUD.statusChangeById(req.params.id, TYPES[req.params.type.toUpperCase()], res));
 
 module.exports = router;
