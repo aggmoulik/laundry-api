@@ -29,7 +29,16 @@ let userSchema = new Schema({
     },
     last_login: Date,
     google_id: String,
-    facebook_id: String
+    facebook_id: String,
+    status: {
+        type: Number,
+        default: 1
+    },
+    source: {
+        type: String,
+        enum: ['WAP', 'WEB', 'IOS', 'ANDROID'],
+        default: 'WEB'
+    }
 });
 
 userSchema.set('toJSON', {
