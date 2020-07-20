@@ -7,7 +7,10 @@ let offerSchema = new Schema({
     description: String,
     type: String,
     discount: Number,
-    status: Number,
+    status: {
+        type: Number,
+        default: 1
+    },
     start_date: Date,
     end_date: Date,
 });
