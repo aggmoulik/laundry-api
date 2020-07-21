@@ -15,7 +15,4 @@ router.post('/', (req, res) => CRUD.create(req.body, Model, res));
 // Update By Id
 router.post('/:id', (req, res) => CRUD.updateById(req.params.id, req.body, Model, res));
 
-// Delete By Id
-// router.delete('/:id', (req, res) => CRUD.deleteById(req.params.id, Model, res));
-
 module.exports = router;
