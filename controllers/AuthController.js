@@ -54,6 +54,11 @@ module.exports.register = (req, res) => {
         $or: []
     };
 
+    if (!req.body.login_method) {
+        Response.error(res, 401, "Invalid Request");
+        return;
+    }
+
     if (req.body.login_method === 'mobile') {
         query.$or.push({ mobile_no: req.body.mobile_no });
     } else {
@@ -63,26 +68,6 @@ module.exports.register = (req, res) => {
         }
         query.$or.push({ email: req.body.email });
     }
-
-    // Google login
-    // if (req.body.login_method === LoginMethods.GOOGLE) {
-    //     query.$or.push({ google_id: req.body.social_id });
-    // }
-
-    // Facebook login
-    // if (req.body.login_method === LoginMethods.FACEBOOK) {
-    //     query.$or.push({ facebook_id: req.body.social_id });
-    // }
-
-    // Email login
-    // if (req.body.login_method === LoginMethods.EMAIL) {
-    //     query.$or.push({ email: req.body.email });
-    // }
-
-    // Mobile login
-    // if (req.body.login_method === LoginMethods.MOBILE) {
-    //     query.$or.push({ mobile_no: req.body.mobile_no });
-    // }
 
     User.findOne(
         query,
@@ -98,10 +83,16 @@ module.exports.register = (req, res) => {
 
                 let login_method = req.body.login_method;
 
+                if (login_method === 'email') {
+                    if (user.password) user.password = bcrypt.hashSync(user.password, SALT_ROUNDS);
+                    else {
+                        Response.generalResponse(err, res, 401, "Invalid Request")
+                        return;
+                    }
+                }
+
                 if (login_method === 'mobile') delete user._doc.login_method;
                 else user.login_method = login_method;
-
-                if (user.password) user.password = bcrypt.hashSync(user.password, SALT_ROUNDS);
 
                 if (!user.role) user.role = 'user';
 
@@ -129,6 +120,11 @@ module.exports.login = (req, res) => {
     // DB query for User
     let query = {};
 
+    if (!req.body.login_method) {
+        Response.error(res, 401, "Invalid Request");
+        return;
+    }
+
     if (req.body.login_method === 'mobile') {
         query.mobile_no = req.body.username;
     } else {
@@ -138,21 +134,6 @@ module.exports.login = (req, res) => {
         }
         query.email = req.body.username;
     }
-
-    // if (req.body.login_method === LoginMethods.GOOGLE) { // Google login
-    //     query.google_id = req.body.social_id;
-    // } else if (req.body.login_method === LoginMethods.FACEBOOK) { // Facebook Login
-    //     query.facebook_id = req.body.social_id;
-    // } else if (req.body.login_method === LoginMethods.EMAIL) {
-    //     // Email login
-    //     query.email = req.body.username;
-    // } else if (req.body.login_method === LoginMethods.MOBILE) {
-    //     // Mobile login
-    //     query.mobile_no = req.body.username;
-    // } else {
-    //     Response.generalResponse("Invalid Request", res, 404, "Invalid request");
-    //     return;
-    // }
 
     User.findOne(
         query,
@@ -190,15 +171,6 @@ module.exports.login = (req, res) => {
                     }
                 }
             } else {
-                // if (req.body.social_id) {
-                // No user found with social id
-                // Response.generalResponse(err, res, 404, "Invalid social login");
-                // } else if (req.body.login_method === LoginMethods.EMAIL) {
-                // No user found with email
-                // Response.generalResponse(err, res, 404, "Invalid Email or Password");
-                // } else {
-                // No user found with mobile
-                // Response.generalResponse(err, res, 404, "Invalid Mobile");
                 Response.generalResponse(err, res, 404, "Invalid Login");
             }
         });
@@ -230,7 +202,6 @@ module.exports.refresh = async (req, res) => {
             delete user._doc.password;
             Response.generalPayloadResponse(err, user, res, 200, "Access Token");
         });
-        // Response.success(res, 200, "Access Token", user)
     } catch (error) {
         Response.error(res, 401, error.message);
     }
