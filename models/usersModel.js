@@ -20,12 +20,16 @@ let userSchema = new Schema({
     role: String,
     email: String,
     image: String,
-    mobile_no: String,
+    mobile_no: {
+        type: String,
+        default: null
+    },
     password: String,
     refresh_token: String,
     access_token: String,
     location: {
         type: pointSchema,
+        default: null
     },
     last_login: Date,
     google_id: String,
@@ -38,6 +42,10 @@ let userSchema = new Schema({
         type: String,
         enum: ['WAP', 'WEB', 'IOS', 'ANDROID'],
         default: 'WEB'
+    },
+    login_method: {
+        type: String,
+        default: ''
     }
 });
 
