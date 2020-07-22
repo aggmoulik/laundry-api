@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/authRoute');
 let adminRouter = require('./routes/admin/adminRouter');
 let userRouter = require('./routes/usersRoute');
+let orderRouter = require('./routes/orderRoute');
 
 const { uploadFile } = require('./controllers/UploadController');
 
@@ -76,7 +77,8 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.post('/upload', (req, res) => uploadFile(req, res));
-app.post('/users', userRouter);
+app.use('/users', userRouter);
+app.use('/orders', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
