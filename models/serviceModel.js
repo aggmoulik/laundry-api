@@ -4,7 +4,11 @@ let Schema = mongoose.Schema;
 let serviceSchema = new Schema({
     name: String,
     image: String,
-    description: String
+    description: String,
+    status: {
+        type: Number,
+        default: 1
+    }
 });
 
 serviceSchema.set('toJSON', {
