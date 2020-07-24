@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+const UserTranslatedProductSchema = new Schema({
+    name: String,
+    description: String
+});
+
 let productSchema = new Schema({
     name: String,
-    image: String,
     description: String,
     price: String,
+    image: String,
     services: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'services'
@@ -17,7 +22,8 @@ let productSchema = new Schema({
     status: {
         type: Number,
         default: 1
-    }
+    },
+    tr: UserTranslatedProductSchema
 });
 
 productSchema.set('toJSON', {

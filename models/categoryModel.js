@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+const UserTranslatedCategorySchema = new Schema({
+    name: String,
+    description: String
+});
+
 let category = new Schema({
     name: String,
     image: String,
@@ -8,7 +13,8 @@ let category = new Schema({
     status: {
         type: Number,
         default: 1
-    }
+    },
+    tr: UserTranslatedCategorySchema
 });
 
 category.set('toJSON', {

@@ -1,18 +1,27 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+const UserTranslatedOfferSchema = new Schema({
+    name: String,
+    description: String
+});
+
 let offerSchema = new Schema({
     name: String,
     code: String,
+    total_coupon: Number,
+    min_amount: Number,
+    max_amount: Number,
+    discount_percent: Number,
+    discount_type: String,
     description: String,
-    type: String,
-    discount: Number,
+    valid_start_date: Date,
+    valid_end_date: Date,
     status: {
         type: Number,
         default: 1
     },
-    start_date: Date,
-    end_date: Date,
+    tr: UserTranslatedOfferSchema
 });
 
 offerSchema.set('toJSON', {

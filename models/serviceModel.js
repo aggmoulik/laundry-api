@@ -5,6 +5,11 @@ let serviceSchema = new Schema({
     name: String,
     image: String,
     description: String,
+    fee_type: {
+        type: String,
+        enum: ['kg', 'unit'],
+        default: 'kg'
+    },
     status: {
         type: Number,
         default: 1
