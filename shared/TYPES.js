@@ -5,7 +5,8 @@ const TYPES = Object.freeze({
     SERVICE: '../models/serviceModel',
     OFFER: '../models/offerModel',
     ORDER: '../models/orders',
-    DISTANCE: '../models/distanceModel'
+    DISTANCE: '../models/distanceModel',
+    BLOG: '../models/blogModel'
 });
 
 module.exports = TYPES;
