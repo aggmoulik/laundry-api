@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+const UserTranslatedServiceSchema = new Schema({
+    name: String,
+    description: String
+});
+
 let serviceSchema = new Schema({
     name: String,
     image: String,
@@ -13,7 +18,8 @@ let serviceSchema = new Schema({
     status: {
         type: Number,
         default: 1
-    }
+    },
+    tr: UserTranslatedServiceSchema
 });
 
 serviceSchema.set('toJSON', {
