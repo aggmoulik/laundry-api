@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+const UserTranslatedBlogSchema = Schema({
+    name: String,
+    content: String
+});
+
 let blogSchema = new Schema({
     name: String,
     image: String,
@@ -9,6 +14,7 @@ let blogSchema = new Schema({
         type: Number,
         default: 1
     },
+    tr: UserTranslatedBlogSchema
 });
 
 
