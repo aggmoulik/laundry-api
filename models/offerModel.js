@@ -17,6 +17,7 @@ let offerSchema = new Schema({
     description: String,
     valid_start_date: Date,
     valid_end_date: Date,
+    total_used: Number,
     status: {
         type: Number,
         default: 1
