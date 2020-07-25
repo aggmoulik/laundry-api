@@ -25,7 +25,7 @@ function getDistanceBetweenTwoCordinates(lat1, lng1, lat2, lng2) {
 
 module.exports.addDeliveryPlan = (req, res) => CRUD.create(req.body, Model, res);
 
-module.exports.getPlan = async (req, res) => {
+module.exports.getPlan = (req, res) => {
     const { lat1, lng1, lat2, lng2 } = req.body.location;
     const distance = getDistanceBetweenTwoCordinates(lat1, lng1, lat2, lng2);
     Distance.find(
@@ -33,7 +33,6 @@ module.exports.getPlan = async (req, res) => {
             "max_distance": { $gte: distance },
             "min_distance": { $lte: distance }
         }, (err, doc) => {
-            console.log(doc[0].charge.toString());
             Response.generalPayloadResponse(err, {
                 charges: doc[0].charge.toString()
             }, res, 200, "OK");

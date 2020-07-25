@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+const mongoose = require('mongoose'),
+    shortid = require('shortid').seed(1000),
+    Schema = mongoose.Schema;
 
 const pointSchema = new mongoose.Schema({
     type: {
@@ -12,6 +13,14 @@ const pointSchema = new mongoose.Schema({
         required: true
     }
 });
+
+/**
+ * @property {String} referral_code unique referral code of user
+ * @property {Boolean} referral_used it determines whether the referral is converted to coupon
+ * @property {Number} referral_count total no of referrals
+ * @property {ObjectId} referred_by user id of referrer
+ * @property {Number} referral_claimed total no of referral claims
+ */
 
 let userSchema = new Schema({
     firstname: String,
@@ -34,6 +43,28 @@ let userSchema = new Schema({
     last_login: Date,
     google_id: String,
     facebook_id: String,
+    referral_code: {
+        type: String,
+        default: shortid.generate(),
+        unique: true
+    },
+    referral_used: {
+        type: Boolean,
+        default: false
+    },
+    referral_count: {
+        type: Number,
+        default: 0
+    },
+    referred_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        default: null
+    },
+    referral_claimed: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: Number,
         default: 1
