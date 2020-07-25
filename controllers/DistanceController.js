@@ -38,4 +38,6 @@ module.exports.getPlan = async (req, res) => {
                 charges: doc[0].charge.toString()
             }, res, 200, "OK");
         });
-}
+};
+
+module.exports.getAllDistances = (req, res) => CRUD.getAll(req, Model, res);
