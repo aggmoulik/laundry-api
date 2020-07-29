@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     address: Object,
     order_date: Date,
     status: String,
-    products: [Product],
+    products: [Object],
 });
 
 orderSchema.set('toJSON', {
