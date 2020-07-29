@@ -23,7 +23,7 @@ const DB_NAME = 'laundry';
 const DB_HOST_NAME = 'c1ph3r';
 const server = `mongodb+srv://${DB_HOST_NAME}:${DB_PASSWORD}@laundry.3m5pn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
-mongoose.connect(server, { useNewUrlParser: true }, () => {
+mongoose.connect(server, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
   console.log("DB Connected");
 }).catch((error) => {
   console.log(error);
