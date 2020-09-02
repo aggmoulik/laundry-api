@@ -69,6 +69,10 @@ let userSchema = new Schema({
         type: Number,
         default: 1
     },
+    address: {
+        type: Object,
+        default: {}
+    },
     source: {
         type: String,
         enum: ['WAP', 'WEB', 'IOS', 'ANDROID'],

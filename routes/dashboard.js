@@ -4,6 +4,8 @@ const express = require('express'),
     services = require('../models/serviceModel'),
     blogs = require('../models/blogModel'),
     orders = require('../models/orders'),
+    categories = require('../models/categoryModel'),
+    items = require('../models/productModel'),
     Response = require('../shared/Response');
 
 router.get('/', async (req, res) => {
@@ -11,12 +13,16 @@ router.get('/', async (req, res) => {
     let service = await services.find({ status: 1 });
     let blog = await blogs.find({ status: 1 });
     let order = await orders.find({ status: 1 });
+    let category = await categories.find({status: 1});
+    let products = await items.find({status: 1});
 
     Response.generalPayloadResponse(null, {
         offers: offer,
         services: service,
         blogs: blog,
-        orders: order
+        orders: order,
+        category: category,
+        products: products
     }, res, 200);
 })
 

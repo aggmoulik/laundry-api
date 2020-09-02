@@ -26,6 +26,7 @@ function getDistanceBetweenTwoCordinates(lat1, lng1, lat2, lng2) {
 module.exports.addDeliveryPlan = (req, res) => CRUD.create(req.body, Model, res);
 
 module.exports.getPlan = (req, res) => {
+    // location : { lat1, lng1, lat2, lng2 }
     const { lat1, lng1, lat2, lng2 } = req.body.location;
     const distance = getDistanceBetweenTwoCordinates(lat1, lng1, lat2, lng2);
     Distance.find(
