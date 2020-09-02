@@ -13,6 +13,7 @@ let userRouter = require('./routes/usersRoute');
 let orderRouter = require('./routes/orderRoute');
 let distanceRouter = require('./routes/distance');
 let dashboardRouter = require('./routes/dashboard');
+let settingsRouter = require('./routes/settings');
 
 const { uploadFile } = require('./controllers/UploadController');
 
@@ -83,6 +84,7 @@ app.use('/users', userRouter);
 app.use('/orders', orderRouter);
 app.use('/distance', distanceRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/settings', settingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

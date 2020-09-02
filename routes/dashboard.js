@@ -6,6 +6,7 @@ const express = require('express'),
     orders = require('../models/orders'),
     categories = require('../models/categoryModel'),
     items = require('../models/productModel'),
+    setting = require('../models/settingsModel'),
     Response = require('../shared/Response');
 
 router.get('/', async (req, res) => {
@@ -15,6 +16,7 @@ router.get('/', async (req, res) => {
     let order = await orders.find();
     let category = await categories.find({status: 1});
     let products = await items.find({status: 1});
+    let settings = await setting.find();
 
     Response.generalPayloadResponse(null, {
         offers: offer,
@@ -22,7 +24,8 @@ router.get('/', async (req, res) => {
         blogs: blog,
         orders: order,
         category: category,
-        products: products
+        products: products,
+        settings: settings
     }, res, 200);
 })
 
