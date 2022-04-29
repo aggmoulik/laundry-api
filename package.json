@@ -7,7 +7,7 @@
     "forever:start": "./node_modules/forever/bin/forever start ./forever/development.json"
   },
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "awesome-phonenumber": "^2.36.0",
     "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
